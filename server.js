@@ -7,7 +7,18 @@ app.get("/run", (req, res) => {
 
     const command = req.query.cmd;
 
-    exec(command);
+    const allowedCommands = {
+        date: "date",
+        uptime: "uptime"
+    };
+
+    const cmd = allowedCommands[req.query.cmd];
+
+    if (!cmd) {
+        return res.status(400).send("Invalid command");
+    }
+
+    exec(cmd);
 
     res.send("Executed");
 });
