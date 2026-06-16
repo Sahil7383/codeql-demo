@@ -3,7 +3,14 @@ const { exec } = require("child_process");
 
 const app = express();
 
-app.get("/run", (req, res) => {
+const rateLimit = require("express-rate-limit");
+
+const runLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20
+});
+
+app.get("/run", runLimiter, (req, res) => {
 
     const command = req.query.cmd;
 
